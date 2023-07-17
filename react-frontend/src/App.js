@@ -1,14 +1,31 @@
+import { useEffect, useState } from 'react'
 import './App.css';
-import axios from "axios"
+import axios from 'axios'
 
 function App() {
-  axios.get("/api/v1/todos")
-    .then(res => {
-      console.log(res.data);
-    }).catch(err => {
-      console.log(err);
-    });
-  return <h1> Hello React </h1>
+
+  const [todos, setTodos] = useState([])
+
+  useEffect(() => {
+    axios.get("/api/v1/todos")
+      .then(res => {
+        console.log(res.data);
+        setTodos(res.data)
+      }).catch(err => {
+        console.log(err);
+      });
+  }, [])
+
+  return (
+    <div>
+      <h1>
+        Number of Todos : {todos.length}
+      </h1>
+      <ul>
+        {todos.map(t => <li> Id: {t.id} description: {t.name} Done: {String(t.done)} </li>)}
+      </ul>
+    </div>
+  )
 }
 
 export default App;
